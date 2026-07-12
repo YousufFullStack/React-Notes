@@ -1,0 +1,154 @@
+# React `useState` Notes
+
+## What is `useState`?
+
+`useState` is a React Hook that allows functional components to **store and update state**.
+
+---
+
+## Syntax
+
+```jsx
+const [state, setState] = useState(initialValue);
+```
+
+- `state` → Current value.
+- `setState` → Function to update the state.
+- `initialValue` → Initial state value.
+
+---
+
+## Example
+
+```jsx
+import { useState } from "react";
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <>
+      <h1>{count}</h1>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </>
+  );
+}
+```
+
+---
+
+## How It Works
+
+```text
+Initial State
+count = 0
+      │
+      ▼
+setCount(count + 1)
+      │
+      ▼
+count = 1
+      │
+      ▼
+Component Re-renders
+```
+
+---
+
+## Updating State
+
+### Number
+
+```jsx
+setCount(count + 1);
+```
+
+### String
+
+```jsx
+setName("Yousuf");
+```
+
+### Boolean
+
+```jsx
+setIsLoggedIn(true);
+```
+
+### Array
+
+```jsx
+setItems([...items, newItem]);
+```
+
+### Object
+
+```jsx
+setUser({
+  ...user,
+  age: 25,
+});
+```
+
+---
+
+## Updating Based on Previous State
+
+Use the callback form when the new value depends on the previous value.
+
+```jsx
+setCount((prev) => prev + 1);
+```
+
+---
+
+## Multiple States
+
+```jsx
+const [name, setName] = useState("");
+const [age, setAge] = useState(20);
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+```
+
+---
+
+## When to Use
+
+- Store user input.
+- Manage counters.
+- Toggle UI elements.
+- Handle form data.
+- Store API responses.
+
+---
+
+## Best Practices
+
+- Keep state as simple as possible.
+- Use separate state variables for unrelated data.
+- Use the previous state callback when needed.
+- Never update state directly.
+
+❌ Wrong
+
+```jsx
+count = count + 1;
+```
+
+✅ Correct
+
+```jsx
+setCount(count + 1);
+```
+
+---
+
+## Key Points
+
+- `useState` stores component data.
+- Updating state causes the component to re-render.
+- Always update state using the setter function.
+- One component can have multiple `useState` hooks.
+- State is preserved between renders.
