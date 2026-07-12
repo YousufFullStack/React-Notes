@@ -1,0 +1,104 @@
+````markdown
+# React `useCallback` Notes
+
+## What is `useCallback`?
+
+`useCallback` is a React Hook that **memoizes (remembers) a function** and returns the same function reference unless its dependencies change.
+
+---
+
+## Syntax
+
+```jsx
+const memoizedFunction = useCallback(() => {
+  // Function logic
+}, [dependencies]);
+```
+
+---
+
+## Why Use `useCallback`?
+
+- Prevents unnecessary function recreation.
+- Reduces unnecessary child component re-renders.
+- Keeps function references stable.
+- Useful with `React.memo` and `useEffect`.
+
+---
+
+## How It Works
+
+```text
+Component Re-renders
+        │
+        ▼
+Dependencies Changed?
+        │
+   ┌────┴────┐
+   │         │
+  Yes        No
+   │         │
+Create      Reuse
+New         Existing
+Function    Function
+```
+
+---
+
+## Example
+
+```jsx
+const handleClick = useCallback(() => {
+  console.log("Button Clicked");
+}, []);
+```
+
+---
+
+## With Dependencies
+
+```jsx
+const fetchData = useCallback(() => {
+  console.log(count);
+}, [count]);
+```
+
+- If `count` changes → New function is created.
+- If `count` doesn't change → Same function is reused.
+
+---
+
+## When to Use
+
+- Passing functions to `React.memo` components.
+- Using functions inside `useEffect`.
+- Optimizing performance.
+
+---
+
+## When NOT to Use
+
+- Small/simple functions.
+- Functions not passed as props.
+- When performance optimization isn't needed.
+
+---
+
+## `useCallback` vs `useMemo`
+
+| `useCallback` | `useMemo` |
+|---------------|-----------|
+| Memoizes a function | Memoizes a value |
+| Returns a function | Returns a computed value |
+
+---
+
+## Key Points
+
+- Remembers a function.
+- Uses a dependency array.
+- Recreates the function only when dependencies change.
+- Helps prevent unnecessary re-renders.
+- **Does not make the function execute faster.**
+```
+````
