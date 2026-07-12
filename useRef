@@ -1,0 +1,186 @@
+# React `useRef` Notes
+
+A concise guide to understanding the **`useRef`** Hook in React.
+
+---
+
+## Table of Contents
+
+- What is `useRef`?
+- Syntax
+- Why Use `useRef`?
+- How It Works
+- Accessing DOM Elements
+- Storing Values
+- `useRef` vs `useState`
+- When to Use
+- Best Practices
+- Key Points
+
+---
+
+# What is `useRef`?
+
+`useRef` is a React Hook that creates a **mutable reference** that persists across renders.
+
+Unlike `useState`, updating a `useRef` value **does not cause the component to re-render**.
+
+---
+
+# Syntax
+
+```jsx
+const ref = useRef(initialValue);
+```
+
+- **initialValue** → The initial value stored in the reference.
+- **ref.current** → Holds the current value.
+
+---
+
+# Why Use `useRef`?
+
+- Access DOM elements directly.
+- Store mutable values without re-rendering.
+- Persist values between renders.
+- Focus input fields.
+- Store timer IDs.
+- Store previous values.
+
+---
+
+# How It Works
+
+```text
+Component Renders
+        │
+        ▼
+useRef Creates an Object
+        │
+        ▼
+ref.current Stores Value
+        │
+        ▼
+Update ref.current
+        │
+        ▼
+❌ No Re-render
+```
+
+---
+
+# Accessing a DOM Element
+
+```jsx
+import { useRef } from "react";
+
+function App() {
+  const inputRef = useRef(null);
+
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <>
+      <input ref={inputRef} />
+      <button onClick={focusInput}>
+        Focus Input
+      </button>
+    </>
+  );
+}
+```
+
+---
+
+# Storing a Value
+
+```jsx
+const countRef = useRef(0);
+
+const increment = () => {
+  countRef.current++;
+  console.log(countRef.current);
+};
+```
+
+Updating `countRef.current` changes the value but **does not re-render** the component.
+
+---
+
+# Password Generator Example
+
+```jsx
+const passwordRef = useRef(null);
+
+<input
+  ref={passwordRef}
+  value={password}
+  readOnly
+/>
+```
+
+Copy the password:
+
+```jsx
+const copyPassword = () => {
+  passwordRef.current.select();
+  window.navigator.clipboard.writeText(password);
+};
+```
+
+Here, `useRef` provides direct access to the input element so you can select and copy its content.
+
+---
+
+# `useRef` vs `useState`
+
+| `useRef` | `useState` |
+|-----------|------------|
+| Stores mutable values | Stores state |
+| Does **not** re-render | Re-renders component |
+| Access using `ref.current` | Access directly |
+| Best for DOM access | Best for UI updates |
+
+---
+
+# When to Use
+
+Use `useRef` when you need to:
+
+- Access DOM elements.
+- Focus an input field.
+- Copy text from an input.
+- Store timer IDs.
+- Store previous values.
+- Persist values without triggering a re-render.
+
+---
+
+# Best Practices
+
+- Use `useRef` for DOM manipulation.
+- Use it for values that don't affect the UI.
+- Use `useState` when changing the value should update the UI.
+- Avoid overusing `useRef` for application state.
+
+---
+
+# Key Points
+
+- `useRef` creates a mutable reference.
+- Access the value using `ref.current`.
+- Updating `ref.current` **does not** trigger a re-render.
+- The value persists across component renders.
+- Commonly used for DOM manipulation and storing mutable values.
+
+---
+
+# Summary
+
+- ✅ Creates a mutable reference.
+- ✅ Persists across renders.
+- ✅ Accesses DOM elements directly.
+- ✅ Stores values without re-rendering.
+- ✅ Ideal for focus, timers, previous values, and clipboard operations.
