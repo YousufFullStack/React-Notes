@@ -1,0 +1,261 @@
+# React `useEffect` Notes
+
+## What is `useEffect`?
+
+`useEffect` is a React Hook that lets you **run code after a component renders**.
+
+It is mainly used for **side effects**, such as:
+
+- Fetching data from an API
+- Setting timers
+- Updating the page title
+- Adding event listeners
+- Accessing local storage
+
+---
+
+## Syntax
+
+```jsx
+useEffect(() => {
+  // Code to run
+}, [dependencies]);
+```
+
+- **First argument:** Function to execute.
+- **Second argument:** Dependency array that controls when the effect runs.
+
+---
+
+## Why Do We Need `useEffect`?
+
+Some tasks should happen **after React updates the UI**, not during rendering.
+
+Example:
+
+- Fetch data from an API
+- Generate a password
+- Change the page title
+
+That's what `useEffect` is for.
+
+---
+
+## How `useEffect` Works
+
+```text
+Component Renders
+        │
+        ▼
+React Updates UI
+        │
+        ▼
+useEffect Runs
+```
+
+---
+
+# 1. No Dependency Array
+
+```jsx
+useEffect(() => {
+  console.log("Runs after every render");
+});
+```
+
+### Runs:
+
+- Initial render ✅
+- Every re-render ✅
+
+---
+
+# 2. Empty Dependency Array
+
+```jsx
+useEffect(() => {
+  console.log("Runs only once");
+}, []);
+```
+
+### Runs:
+
+- Initial render ✅
+- Re-renders ❌
+
+This is useful for:
+
+- API calls
+- Loading data
+- Setting up event listeners
+
+---
+
+# 3. With Dependencies
+
+```jsx
+useEffect(() => {
+  console.log("Count changed");
+}, [count]);
+```
+
+### Runs:
+
+- Initial render ✅
+- Whenever `count` changes ✅
+- Doesn't run if `count` stays the same ❌
+
+---
+
+## Example
+
+```jsx
+import { useState, useEffect } from "react";
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log("Count is:", count);
+  }, [count]);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Increment
+    </button>
+  );
+}
+```
+
+Every time `count` changes, `useEffect` runs.
+
+---
+
+## Real Example (Password Generator)
+
+```jsx
+useEffect(() => {
+  passwordGenerator();
+}, [length, numberAllowed, charAllowed]);
+```
+
+### What happens?
+
+When the user changes:
+
+- Password length
+- Numbers checkbox
+- Special characters checkbox
+
+React runs:
+
+```text
+Component Re-renders
+        │
+        ▼
+Dependency Changed
+        │
+        ▼
+passwordGenerator()
+        │
+        ▼
+New Password Generated
+```
+
+---
+
+## Cleanup Function
+
+Some effects need cleanup, like timers or event listeners.
+
+```jsx
+useEffect(() => {
+  const timer = setInterval(() => {
+    console.log("Running...");
+  }, 1000);
+
+  return () => {
+    clearInterval(timer);
+  };
+}, []);
+```
+
+The cleanup function runs:
+
+- Before the effect runs again.
+- When the component is removed (unmounted).
+
+---
+
+## When to Use `useEffect`
+
+Use it for:
+
+- Fetching API data
+- Timers
+- Event listeners
+- Updating the page title
+- Local storage
+- Running code after rendering
+
+---
+
+## When NOT to Use It
+
+Don't use `useEffect` for:
+
+- Simple calculations
+- Rendering UI
+- Updating state unnecessarily
+
+---
+
+## Key Points
+
+- `useEffect` runs **after the component renders**.
+- It is used for **side effects**.
+- The dependency array controls **when it runs**.
+- `[]` → Runs only once.
+- No dependency array → Runs after every render.
+- `[value]` → Runs when that value changes.
+- Use a cleanup function for timers and event listeners.
+
+---
+
+## Quick Interview Answers
+
+### What is `useEffect`?
+
+A React Hook that runs side-effect code after a component renders.
+
+### Why do we use `useEffect`?
+
+To perform tasks like API calls, timers, event listeners, and DOM updates.
+
+### What does an empty dependency array (`[]`) mean?
+
+Run the effect only once after the initial render.
+
+### What happens if there is no dependency array?
+
+The effect runs after every render.
+
+### Can `useEffect` have multiple dependencies?
+
+Yes.
+
+```jsx
+useEffect(() => {
+  console.log("Updated");
+}, [count, name]);
+```
+
+---
+
+## Summary
+
+- ✅ Runs after rendering.
+- ✅ Used for side effects.
+- ✅ Can run once, every render, or when dependencies change.
+- ✅ Supports cleanup functions.
+- ✅ Commonly used for API calls, timers, and event listeners.
